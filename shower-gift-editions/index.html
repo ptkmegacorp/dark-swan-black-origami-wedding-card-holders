@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shower to Table — Fold-Together Place Cards</title>
+
+  <style>
+    :root {
+      --bg: #f6f4f1;
+      --surface: #ffffff;
+      --text: #2c3338;
+      --text-soft: #5c6570;
+      --text-muted: #8a939e;
+      --border: #e3e0db;
+      --accent: #d4715c;
+      --accent-soft: #f3e0da;
+      --step-shower: #fdeee8;
+      --step-shower-accent: #e8956f;
+      --step-home: #e8f0f8;
+      --step-home-accent: #6a9fd4;
+      --step-wedding: #e8f5ef;
+      --step-wedding-accent: #5da882;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      font-size: 16px;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: clamp(32px, 5vw, 52px);
+      line-height: 1.15;
+      font-weight: 700;
+      margin-bottom: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-size: clamp(24px, 3.5vw, 32px);
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+
+    h3 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    /* Hero */
+
+    .hero {
+      padding: 32px 24px 64px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+
+    .hero-nav {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .hero-link {
+      color: var(--text-soft);
+      font-size: 14px;
+      text-decoration: none;
+    }
+
+    .hero-link:hover {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+
+    .hero-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .hero-copy p {
+      font-size: 18px;
+      color: var(--text-soft);
+      max-width: 520px;
+    }
+
+    .hero-tagline {
+      margin-top: 20px;
+      font-size: 16px;
+      color: var(--text-muted);
+    }
+
+    .hero-visual {
+      aspect-ratio: 4 / 3;
+      background: var(--bg);
+      border-radius: var(--radius);
+      border: 1px dashed var(--border);
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    /* Sections */
+
+    .section {
+      padding: 64px 24px;
+    }
+
+    .section-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      max-width: 640px;
+      margin-bottom: 40px;
+    }
+
+    .section-header p {
+      color: var(--text-soft);
+      font-size: 17px;
+      margin-top: 8px;
+    }
+
+    .intro-panel {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      background: var(--surface);
+      max-width: 720px;
+    }
+
+    .intro-panel p {
+      color: var(--text-soft);
+      font-size: 17px;
+    }
+
+    .intro-panel p + p {
+      margin-top: 14px;
+    }
+
+    /* Placeholders */
+
+    .placeholder {
+      width: 100%;
+      height: 100%;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-sm);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 20px;
+      background: rgba(255,255,255,.6);
+    }
+
+    .placeholder__label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .placeholder__hint {
+      display: block;
+      margin-top: 6px;
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* Three-step journey */
+
+    .journey-section {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .journey-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .journey-card {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,.04);
+    }
+
+    .journey-card--shower {
+      border-top: 4px solid var(--step-shower-accent);
+    }
+
+    .journey-card--home {
+      border-top: 4px solid var(--step-home-accent);
+    }
+
+    .journey-card--wedding {
+      border-top: 4px solid var(--step-wedding-accent);
+    }
+
+    .journey-card__visual {
+      aspect-ratio: 4 / 3;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+
+    .journey-card--shower .journey-card__visual {
+      background: var(--step-shower);
+    }
+
+    .journey-card--home .journey-card__visual {
+      background: var(--step-home);
+    }
+
+    .journey-card--wedding .journey-card__visual {
+      background: var(--step-wedding);
+    }
+
+    .journey-card__body {
+      padding: 24px 22px 28px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .journey-card__step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .step-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--surface);
+      flex-shrink: 0;
+    }
+
+    .journey-card--shower .step-badge {
+      background: var(--step-shower-accent);
+    }
+
+    .journey-card--home .step-badge {
+      background: var(--step-home-accent);
+    }
+
+    .journey-card--wedding .step-badge {
+      background: var(--step-wedding-accent);
+    }
+
+    .journey-card__phase {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .journey-card__title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .journey-card__desc {
+      color: var(--text-soft);
+      font-size: 15px;
+      margin-bottom: 16px;
+    }
+
+    .journey-card__feels {
+      margin-top: auto;
+      padding: 14px 16px;
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      font-size: 14px;
+      color: var(--text-soft);
+    }
+
+    .journey-card__feels strong {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    /* Themes */
+
+    .theme {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: stretch;
+      margin-bottom: 48px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .theme:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .theme--reverse .theme__visual {
+      order: 2;
+    }
+
+    .theme--reverse .theme__copy {
+      order: 1;
+    }
+
+    .theme__visual {
+      min-height: 380px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 2px 8px rgba(0,0,0,.04);
+    }
+
+    .theme__hero-placeholder {
+      flex: 1.2;
+      min-height: 220px;
+    }
+
+    .theme__mini-flow {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+    }
+
+    .theme__mini-step {
+      padding: 12px 10px;
+      text-align: center;
+      border-right: 1px solid var(--border);
+    }
+
+    .theme__mini-step:last-child {
+      border-right: none;
+    }
+
+    .theme__mini-step span {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .theme__mini-step .mini-ph {
+      aspect-ratio: 1;
+      max-width: 64px;
+      margin: 0 auto;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-sm);
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--surface);
+    }
+
+    .theme--wishes .theme__hero-placeholder {
+      background: var(--step-home);
+    }
+
+    .theme--garden .theme__hero-placeholder {
+      background: var(--step-wedding);
+    }
+
+    .theme--stars .theme__hero-placeholder {
+      background: #eeeaf5;
+    }
+
+    .theme__copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 4px 0;
+    }
+
+    .theme__number {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .theme__tagline {
+      font-size: 16px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .theme__story {
+      color: var(--text-soft);
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    .theme__why {
+      border-left: 3px solid var(--accent);
+      padding: 12px 0 12px 16px;
+      background: var(--accent-soft);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      margin-bottom: 20px;
+    }
+
+    .theme__why strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .theme__why p {
+      color: var(--text-soft);
+      font-size: 15px;
+    }
+
+    .theme__table {
+      font-size: 15px;
+      color: var(--text-soft);
+    }
+
+    .theme__table strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .theme__colors {
+      margin-top: 16px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .swatch {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+    }
+
+    .colors-label {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Closing */
+
+    .closing-section {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+    }
+
+    .includes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .includes-item {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      background: var(--bg);
+    }
+
+    .includes-item strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .includes-item span {
+      color: var(--text-soft);
+      font-size: 15px;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .button {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      padding: 12px 22px;
+      border-radius: var(--radius-sm);
+      border: none;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .button:hover {
+      filter: brightness(.95);
+    }
+
+    .button.secondary {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .note {
+      margin-top: 24px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .note a {
+      color: var(--accent);
+    }
+
+    @media (max-width: 900px) {
+      .hero-layout,
+      .journey-grid,
+      .theme,
+      .includes-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .theme--reverse .theme__visual,
+      .theme--reverse .theme__copy {
+        order: unset;
+      }
+
+      .theme__visual {
+        min-height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="hero-top">
+        <div class="brand">Shower to Table</div>
+        <nav class="hero-nav">
+          <a class="hero-link" href="../index.html">All projects</a>
+          <a class="hero-link" href="../place-card-holders/index.html">Solo set</a>
+        </nav>
+      </div>
+
+      <div class="hero-layout">
+        <div class="hero-copy">
+          <div class="eyebrow">A shower activity that becomes your wedding tables</div>
+          <h1>Fold together at the shower. Use them as place cards at the wedding.</h1>
+          <p>
+            Friends and family fold printed origami crane sheets during the
+            bridal shower. The couple takes them home. Those same cranes show up
+            on the reception tables holding everyone's place cards.
+          </p>
+          <p class="hero-tagline">One gift, two big days.</p>
+        </div>
+
+        <div class="hero-visual">
+          <div class="placeholder" style="border: none; background: transparent;">
+            <span class="placeholder__label">
+              Hero image
+              <span class="placeholder__hint">People folding at a shower table</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="eyebrow">How it works</div>
+        <h2>A group gift you actually do together.</h2>
+      </div>
+
+      <div class="intro-panel">
+        <p>
+          Each set comes as flat printed sheets — not pre-folded. The fold lines
+          are printed right on the paper, so guests can follow along without any
+          origami experience. All you need is a table and a little time.
+        </p>
+        <p>
+          What makes this different from buying place cards online is who does
+          the folding and when. The shower is where the cranes get made. The
+          wedding is where they get used. Same paper cranes, two parts of the
+          same story.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section journey-section" id="journey">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="eyebrow">Three steps</div>
+        <h2>Shower → home → wedding.</h2>
+        <p>
+          Every theme follows the same path. Pick the look you like — the steps
+          stay the same.
+        </p>
+      </div>
+
+      <div class="journey-grid">
+        <article class="journey-card journey-card--shower">
+          <div class="journey-card__visual">
+            <div class="placeholder">
+              <span class="placeholder__label">
+                Photo: shower activity
+                <span class="placeholder__hint">Guests folding at the table</span>
+              </span>
+            </div>
+          </div>
+          <div class="journey-card__body">
+            <div class="journey-card__step">
+              <div class="step-badge">1</div>
+              <span class="journey-card__phase">At the shower</span>
+            </div>
+            <h3 class="journey-card__title">Everyone folds together</h3>
+            <p class="journey-card__desc">
+              Someone opens the box and passes out sheets. People sit around
+              the table, follow the printed guides, chat, help each other with
+              tricky folds, and slowly fill the room with little paper cranes.
+            </p>
+            <div class="journey-card__feels">
+              <strong>Feels like</strong>
+              A fun group activity — more interesting than another round of bingo.
+            </div>
+          </div>
+        </article>
+
+        <article class="journey-card journey-card--home">
+          <div class="journey-card__visual">
+            <div class="placeholder">
+              <span class="placeholder__label">
+                Photo: going home
+                <span class="placeholder__hint">Cranes packed up with the couple</span>
+              </span>
+            </div>
+          </div>
+          <div class="journey-card__body">
+            <div class="journey-card__step">
+              <div class="step-badge">2</div>
+              <span class="journey-card__phase">After the party</span>
+            </div>
+            <h3 class="journey-card__title">The cranes go home with you</h3>
+            <p class="journey-card__desc">
+              The folded cranes leave in a shoebox, tote bag, whatever works.
+              They sit on a shelf until the wedding gets closer. You already
+              know who's coming to the reception — you watched them make these.
+            </p>
+            <div class="journey-card__feels">
+              <strong>Feels like</strong>
+              A gift that's already useful before the wedding even happens.
+            </div>
+          </div>
+        </article>
+
+        <article class="journey-card journey-card--wedding">
+          <div class="journey-card__visual">
+            <div class="placeholder">
+              <span class="placeholder__label">
+                Photo: wedding tables
+                <span class="placeholder__hint">Cranes with place cards at reception</span>
+              </span>
+            </div>
+          </div>
+          <div class="journey-card__body">
+            <div class="journey-card__step">
+              <div class="step-badge">3</div>
+              <span class="journey-card__phase">On the wedding day</span>
+            </div>
+            <h3 class="journey-card__title">They become your place cards</h3>
+            <p class="journey-card__desc">
+              Slide a name card into each crane and set them on the tables.
+              Guests who were at the shower spot the ones they folded. Everyone
+              else just thinks they look nice — which they do.
+            </p>
+            <div class="journey-card__feels">
+              <strong>Feels like</strong>
+              The shower and the wedding connected, without anyone having to explain it.
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="themes">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="eyebrow">Pick a theme</div>
+        <h2>Three looks to start with.</h2>
+        <p>
+          Same fold, same three steps — just different colors and patterns on
+          the paper. More themes can be added later.
+        </p>
+      </div>
+
+      <article class="theme theme--wishes">
+        <div class="theme__visual">
+          <div class="theme__hero-placeholder">
+            <div class="placeholder" style="height: 100%; border: none; background: transparent;">
+              <span class="placeholder__label">
+                Good Wishes theme
+                <span class="placeholder__hint">Soft blue paper, simple crane pattern</span>
+              </span>
+            </div>
+          </div>
+          <div class="theme__mini-flow">
+            <div class="theme__mini-step">
+              <span>Shower</span>
+              <div class="mini-ph">1</div>
+            </div>
+            <div class="theme__mini-step">
+              <span>Home</span>
+              <div class="mini-ph">2</div>
+            </div>
+            <div class="theme__mini-step">
+              <span>Wedding</span>
+              <div class="mini-ph">3</div>
+            </div>
+          </div>
+        </div>
+        <div class="theme__copy">
+          <div class="theme__number">Theme 1</div>
+          <h2>Good Wishes</h2>
+          <p class="theme__tagline">Each guest folds a crane and tucks in a little wish.</p>
+          <p class="theme__story">
+            Based on the old tradition of folding paper cranes for good luck.
+            At the shower, everyone folds one and can write a short wish on
+            the sheet before folding. By the end you've got a pile of cranes
+            that literally contain nice things people said about you.
+          </p>
+          <div class="theme__why">
+            <strong>Good for</strong>
+            <p>
+              Showers where you want something sweet but low-pressure. Even
+              people who hate public speaking can write a wish and fold quietly.
+            </p>
+          </div>
+          <p class="theme__table">
+            <strong>At the wedding:</strong> Soft blue and white cranes on the
+            tables. Simple, cheerful, easy to read from across the room.
+          </p>
+          <div class="theme__colors">
+            <span class="swatch" style="background: #dceaf5;" title="Sky blue"></span>
+            <span class="swatch" style="background: #ffffff;" title="White"></span>
+            <span class="swatch" style="background: #6a9fd4;" title="Soft blue"></span>
+            <span class="colors-label">Sky blue · white · soft blue ink</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="theme theme--garden theme--reverse">
+        <div class="theme__visual">
+          <div class="theme__hero-placeholder">
+            <div class="placeholder" style="height: 100%; border: none; background: transparent;">
+              <span class="placeholder__label">
+                Garden Party theme
+                <span class="placeholder__hint">Green paper with small leaf prints</span>
+              </span>
+            </div>
+          </div>
+          <div class="theme__mini-flow">
+            <div class="theme__mini-step">
+              <span>Shower</span>
+              <div class="mini-ph">1</div>
+            </div>
+            <div class="theme__mini-step">
+              <span>Home</span>
+              <div class="mini-ph">2</div>
+            </div>
+            <div class="theme__mini-step">
+              <span>Wedding</span>
+              <div class="mini-ph">3</div>
+            </div>
+          </div>
+        </div>
+        <div class="theme__copy">
+          <div class="theme__number">Theme 2</div>
+          <h2>Garden Party</h2>
+          <p class="theme__tagline">For couples who already have flowers everywhere.</p>
+          <p class="theme__story">
+            Light green paper with little leaf and vine prints along the edges.
+            Folding feels a bit like potting plants together — everyone adds
+            another crane to the pile. Works especially well if your shower and
+            wedding both have a garden-y vibe going on.
+          </p>
+          <div class="theme__why">
+            <strong>Good for</strong>
+            <p>
+              Outdoor showers, spring weddings, anyone who's already buying
+              a lot of eucalyptus and doesn't want the place cards to clash.
+            </p>
+          </div>
+          <p class="theme__table">
+            <strong>At the wedding:</strong> Sage-green cranes that sit nicely
+            next to floral centerpieces without fighting for attention.
+          </p>
+          <div class="theme__colors">
+            <span class="swatch" style="background: #e4efe6;" title="Sage"></span>
+            <span class="swatch" style="background: #ffffff;" title="White"></span>
+            <span class="swatch" style="background: #5da882;" title="Green"></span>
+            <span class="swatch" style="background: #f5e6ea;" title="Blush"></span>
+            <span class="colors-label">Sage · white · green ink · blush accent</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="theme theme--stars">
+        <div class="theme__visual">
+          <div class="theme__hero-placeholder">
+            <div class="placeholder" style="height: 100%; border: none; background: transparent;">
+              <span class="placeholder__label">
+                Night Sky theme
+                <span class="placeholder__hint">Navy paper with small star dots</span>
+              </span>
+            </div>
+          </div>
+          <div class="theme__mini-flow">
+            <div class="theme__mini-step">
+              <span>Shower</span>
+              <div class="mini-ph">1</div>
+            </div>
+            <div class="theme__mini-step">
+              <span>Home</span>
+              <div class="mini-ph">2</div>
+            </div>
+            <div class="theme__mini-step">
+              <span>Wedding</span>
+              <div class="mini-ph">3</div>
+            </div>
+          </div>
+        </div>
+        <div class="theme__copy">
+          <div class="theme__number">Theme 3</div>
+          <h2>Night Sky</h2>
+          <p class="theme__tagline">Each guest folds a star. Together they make a constellation.</p>
+          <p class="theme__story">
+            Deep blue paper with tiny star prints. Each guest folds one crane
+            and it gets a little star sticker or mark — so at the wedding, all
+            the cranes together look like a night sky. Nice if you met at a
+            late-night diner or just like stargazing.
+          </p>
+          <div class="theme__why">
+            <strong>Good for</strong>
+            <p>
+              Evening receptions, couples who want something a little whimsical
+              without going full fairy-tale. Also works if your guest list feels
+              like "the people who matter most" and you want that on the nose.
+            </p>
+          </div>
+          <p class="theme__table">
+            <strong>At the wedding:</strong> Navy cranes with white star details.
+            Looks great with candles on the table.
+          </p>
+          <div class="theme__colors">
+            <span class="swatch" style="background: #3d4f6f;" title="Navy"></span>
+            <span class="swatch" style="background: #f0eef5;" title="Light lavender"></span>
+            <span class="swatch" style="background: #ffffff;" title="White"></span>
+            <span class="swatch" style="background: #f5d76e;" title="Soft yellow"></span>
+            <span class="colors-label">Navy · lavender · white stars · soft yellow accent</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section closing-section">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="eyebrow">What's in the box</div>
+        <h2>Everything you need for the shower and the wedding.</h2>
+        <p>
+          Works as a group gift from the wedding party, a bridesmaid activity,
+          or something the host plans into the shower schedule.
+        </p>
+      </div>
+
+      <div class="includes-grid">
+        <div class="includes-item">
+          <strong>Flat printed sheets</strong>
+          <span>Fold lines and theme artwork printed on each sheet. You fold them — they don't arrive pre-made.</span>
+        </div>
+        <div class="includes-item">
+          <strong>Enough for your guest list</strong>
+          <span>Count matched to your wedding guests, plus a few extras for mess-ups.</span>
+        </div>
+        <div class="includes-item">
+          <strong>Simple instructions</strong>
+          <span>A one-page guide for whoever's leading the folding at the shower.</span>
+        </div>
+        <div class="includes-item">
+          <strong>Slot for name cards</strong>
+          <span>Finished cranes hold place cards, escort cards, or little menu cards.</span>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a href="#" class="button">Get a shower set</a>
+        <a href="#" class="button secondary">Ask about a custom theme</a>
+      </div>
+
+      <p class="note">
+        Prefer to fold them yourself at home?
+        <a href="../place-card-holders/index.html">See the solo fold-at-home set</a>.
+      </p>
+    </div>
+  </section>
+</body>
+</html>
