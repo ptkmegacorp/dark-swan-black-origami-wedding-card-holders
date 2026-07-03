@@ -160,36 +160,51 @@
 
     .intro-panel {
       border: 1px solid rgba(201,162,74,.45);
-      padding: 44px 46px;
+      padding: 56px 64px 60px;
       background: rgba(255,255,255,.42);
-      max-width: 780px;
+      max-width: 680px;
+      margin: 0 auto;
     }
 
-    .intro-panel p {
+    .concept-steps {
+      list-style: none;
+      counter-reset: concept-step;
+      display: grid;
+      gap: 28px;
+    }
+
+    .concept-steps li {
+      counter-increment: concept-step;
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 16px 22px;
+      align-items: start;
       color: #3f3932;
       font-size: 17px;
+      line-height: 1.6;
     }
 
-    .intro-panel p + p {
-      margin-top: 16px;
-    }
-
-    .fold-callout {
-      border-left: 3px solid var(--gold);
-      padding: 18px 0 18px 22px;
-      margin-top: 28px;
-      color: #3f3932;
+    .concept-steps li::before {
+      content: counter(concept-step);
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(201,162,74,.55);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
       font-size: 16px;
-      background: rgba(201,162,74,.08);
+      color: var(--gold);
+      flex-shrink: 0;
     }
 
-    .fold-callout strong {
+    .concept-steps strong {
       display: block;
-      font-size: 13px;
-      letter-spacing: .12em;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: .08em;
       text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 8px;
+      color: var(--black);
+      margin-bottom: 6px;
     }
 
     /* Journey */
@@ -451,7 +466,44 @@
       }
 
       .intro-panel {
-        padding: 28px;
+        padding: 44px 36px 48px;
+      }
+
+      .concept-steps {
+        gap: 24px;
+      }
+
+      .concept-steps li {
+        font-size: 16px;
+        grid-template-columns: 40px 1fr;
+        gap: 14px 18px;
+      }
+
+      .concept-steps li::before {
+        width: 40px;
+        height: 40px;
+        font-size: 15px;
+      }
+
+      .concept-steps strong {
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .intro-panel {
+        padding: 36px 24px 40px;
+      }
+
+      .concept-steps li {
+        grid-template-columns: 36px 1fr;
+        gap: 12px 14px;
+      }
+
+      .concept-steps li::before {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
       }
     }
   </style>
@@ -491,25 +543,29 @@
       </div>
 
       <div class="intro-panel">
-        <p>
-          Each set ships as flat printed origami sheets — the same matte black
-          paper with gold-accented patterns as the wedding place card holders.
-          Nothing arrives pre-folded. At the shower, friends and family follow
-          the printed fold guides together; at the wedding, those same cranes
-          hold your guest names at the table.
-        </p>
-        <p>
-          Perfect for bridal showers, bridesmaid gatherings, or a meaningful
-          group gift from the wedding party. The folding is gentle enough for
-          anyone to join — no craft expertise required.
-        </p>
-
-        <div class="fold-callout">
-          <strong>Same flat sheets as the wedding set</strong>
-          Every crane still arrives unassembled, ready to be folded together.
-          The shower creates the cranes; the wedding displays them — two
-          moments, one beautiful object.
-        </div>
+        <ol class="concept-steps">
+          <li>
+            <div>
+              <strong>At the bridal shower</strong>
+              Open the set together. Friends and family fold the cranes while
+              stories, laughter, and well-wishes fill the room.
+            </div>
+          </li>
+          <li>
+            <div>
+              <strong>After the party</strong>
+              The folded cranes travel home with you — packed up and kept safe
+              until the wedding.
+            </div>
+          </li>
+          <li>
+            <div>
+              <strong>On the wedding day</strong>
+              Those same cranes become your place card holders, set out on the
+              reception tables with each guest's name.
+            </div>
+          </li>
+        </ol>
       </div>
     </div>
   </section>
